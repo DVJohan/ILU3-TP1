@@ -19,4 +19,11 @@ public class Borne extends Carte {
 		
 		return km + "KM";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		Borne other = (Borne) obj;
+		return this.km == other.km;
+	}
 }

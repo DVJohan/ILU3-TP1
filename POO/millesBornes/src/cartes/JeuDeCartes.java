@@ -1,5 +1,7 @@
 package cartes;
 
+import java.util.*;
+
 public class JeuDeCartes {
 
 	// 19 types de cartes dans la config (page 5) :contentReference[oaicite:1]{index=1}
@@ -50,6 +52,22 @@ public class JeuDeCartes {
 			}
 		}
 		return res;
+	}
+	
+	
+	public boolean checkCount() {
+		Carte[] cartes = donnerCartes();
+		List<Carte> liste = Arrays.asList(cartes);
+
+		for (Configuration c : typesDeCartes) {
+			int attendu = c.getNbExemplaires();
+			int reel = Collections.frequency(liste, c.getCarte());
+
+			if (attendu != reel) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
