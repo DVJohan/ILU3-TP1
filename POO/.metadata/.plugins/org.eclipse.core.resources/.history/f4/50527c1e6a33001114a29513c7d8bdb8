@@ -1,0 +1,7 @@
+package jeu;
+
+public interface Cartes {
+    // Les bottes ne sont pas gérées dans ce TP (voir consigne 9)
+    Attaque FEU_ROUGE = new Attaque(Type.FEU); // [cite: 28]
+    Parade FEU_VERT = new Parade(Type.FEU);    // [cite: 28]
+}

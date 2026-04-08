@@ -53,6 +53,11 @@ public class GestionCartes {
 				return false;
 			}
 		}
+		for (T e : l2) {
+			if (Collections.frequency(l2, e) != Collections.frequency(l1, e)) {
+				return false;
+			}
+		}
 		return true;
 	}
 	

@@ -1,0 +1,10 @@
+package cartes;
+
+public abstract class Limite extends Carte {
+
+	public class FinLimite {
+
+	}
+	
+	// Rien de plus dans le diagramme
+}

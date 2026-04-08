@@ -1,0 +1,54 @@
+package jeu;
+
+import java.util.Objects;
+import cartes.Carte;
+
+
+
+public class Joueur {
+    private String nom;
+    private ZoneDeJeu zoneDeJeu = new ZoneDeJeu();
+    private MainJoueur main = new MainJoueur();
+
+    public Joueur(String nom) {
+        this.nom = nom; // [cite: 13]
+    }
+
+    public MainJoueur getMain() { return main; } // [cite: 21]
+
+    public void donner(Carte c) {
+        main.prendre(c); // [cite: 22]
+    }
+
+    public Carte prendreCarte(Sabot sabot) {
+        if (sabot.estVide()) return null; // [cite: 27]
+        Carte c = sabot.piocher();
+        donner(c); // [cite: 26]
+        return c;
+    }
+
+    public int donnerKmParcourus() {
+        return zoneDeJeu.donnerKmParcourus(); // [cite: 32]
+    }
+
+    public void deposer(Carte c) {
+        zoneDeJeu.deposer(c); // [cite: 33]
+    }
+
+    public boolean estDepotAutorise(Carte c) {
+        return zoneDeJeu.estDepotAutorise(c); // [cite: 66]
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Joueur) {
+            return nom.equals(((Joueur) obj).nom); // [cite: 14]
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return nom; // [cite: 15]
+    }
+}

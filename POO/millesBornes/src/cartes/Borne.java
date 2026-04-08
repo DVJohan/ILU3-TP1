@@ -13,6 +13,10 @@ public class Borne extends Carte {
 		
 		return km;
 	}
+	
+	public int getValeur() {
+        return this.km;
+    }
 
 	@Override
 	public String toString(){

@@ -1,0 +1,84 @@
+package jeu;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import cartes.Carte;
+import cartes.Borne;
+import cartes.Limite;
+import cartes.Bataille;
+import cartes.Attaque;
+import cartes.Parade;
+
+public class ZoneDeJeu {
+    private List<Limite> limites = new LinkedList<>();
+    private List<Bataille> batailles = new LinkedList<>();
+    private List<Borne> bornes = new ArrayList<>();
+
+    // Partie 2 - Question 1
+    public int donnerLimitationVitesse() {
+        if (limites.isEmpty() || limites.get(limites.size() - 1) instanceof Limite.FinLimite) {
+            return 200; // [cite: 30]
+        }
+        return 50; // [cite: 30]
+    }
+
+    // Partie 2 - Question 2
+    public int donnerKmParcourus() {
+        int total = 0;
+        for (Borne b : bornes) {
+            total += b.getValeur(); // [cite: 31]
+        }
+        return total;
+    }
+
+    // Partie 2 - Question 3
+    public void deposer(Carte c) {
+        if (c instanceof Borne) bornes.add((Borne) c); // [cite: 35]
+        else if (c instanceof Limite) limites.add((Limite) c); // [cite: 36]
+        else if (c instanceof Bataille) batailles.add((Bataille) c); // [cite: 37]
+    }
+
+    // --- Partie 3: Autorisations de dépôt ---
+
+    public boolean peutAvancer() {
+        return !batailles.isEmpty() && batailles.get(batailles.size() - 1).equals(Cartes.FEU_VERT); // [cite: 52, 53]
+    }
+
+    private boolean estDepotFeuVertAutorise() {
+        if (batailles.isEmpty()) return true; // [cite: 54]
+        Bataille sommet = batailles.get(batailles.size() - 1);
+        return sommet.equals(Cartes.FEU_ROUGE) || (sommet instanceof Parade && !sommet.equals(Cartes.FEU_VERT)); // [cite: 54]
+    }
+
+    private boolean estDepotBorneAutorise(Borne borne) {
+        return peutAvancer() && borne.getValeur() <= donnerLimitationVitesse() && (donnerKmParcourus() + borne.getValeur() <= 1000); // [cite: 55]
+    }
+
+    private boolean estDepotLimiteAutorise(Limite limite) {
+        if (limite instanceof Limite.DebutLimite) {
+            return limites.isEmpty() || limites.get(limites.size() - 1) instanceof Limite.FinLimite; // [cite: 57]
+        } else {
+            return !limites.isEmpty() && limites.get(limites.size() - 1) instanceof Limite.DebutLimite; // [cite: 58]
+        }
+    }
+
+    private boolean estDepotBatailleAutorise(Bataille bataille) {
+        if (bataille instanceof Attaque) {
+            return peutAvancer(); // [cite: 59]
+        } else { // Parade
+            if (bataille.equals(Cartes.FEU_VERT)) {
+                return estDepotFeuVertAutorise(); // [cite: 61]
+            }
+            return !batailles.isEmpty() && batailles.get(batailles.size() - 1).equals(new Attaque(bataille.getType())); // [cite: 65]
+        }
+    }
+
+    // Méthode principale de vérification (seule visible avec peutAvancer) 
+    public boolean estDepotAutorise(Carte carte) {
+        if (carte instanceof Borne) return estDepotBorneAutorise((Borne) carte);
+        if (carte instanceof Limite) return estDepotLimiteAutorise((Limite) carte);
+        if (carte instanceof Bataille) return estDepotBatailleAutorise((Bataille) carte);
+        return false;
+    }
+}
